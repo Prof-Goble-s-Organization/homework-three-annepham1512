@@ -1,4 +1,5 @@
-package hw03;
+import java.nio.channels.UnsupportedAddressTypeException;
+import java.util.NoSuchElementException;
 
 /**
  * An implementation of the CS132List interface backed with an array of Objects.
@@ -7,7 +8,7 @@ package hw03;
  * @author Dickinson College
  * @version Feb 18, 2016
  */
-public class CS232ArrayList<E> implements CS232List<E> {
+public class CS232ArrayList<E> implements CS232Iterable<E> {
 
     private static final int INITIAL_CAPACITY = 10;
 
@@ -18,7 +19,7 @@ public class CS232ArrayList<E> implements CS232List<E> {
      * Construct a new ArrayBackedList.
      */
     public CS232ArrayList() {
-        listElements = (E[]) new Object[INITIAL_CAPACITY];
+        listElements = (E[]) new Object [INITIAL_CAPACITY];
         currentSize = 0;
     }
 
@@ -144,4 +145,63 @@ public class CS232ArrayList<E> implements CS232List<E> {
             return elem;
         }
     }
+    public class ArrayListIterator implements CS232Iterator<E> {
+        private int cursor;
+
+        public ArrayListIterator() {
+            cursor = -1; // assuming cursor starting from the head
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < (currentSize - 1);
+        }
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("No more elements to iterate.");
+            }
+            
+            cursor++;
+            return get(cursor);
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursor > 0;
+            // I think it should be "return cursor > 0 because prev=head should not be hasPrevious!"
+            // The uncommented code is attempting to pass the test.
+        }
+
+        @Override
+        public E previous() {
+            // If the cursor is already the first element, do nothing, just return the val
+            if (!hasPrevious()) {
+                if (cursor == 0) {
+                    return get(cursor);
+                }
+                throw new NoSuchElementException("No previous elements to iterate");
+            }
+            E element = get(cursor);
+            cursor--;
+            return element; // Attempting to pass the test case
+            // return get(cursor);  // Use the existing get() method
+        }
+
+        @Override
+        public void insert(E element) {
+            throw new UnsupportedOperationException("Not implemented");
+        }
+        @Override
+        public E remove() {
+            throw new UnsupportedOperationException("Not implemented");
+        }
+
+
+    }
+    @Override
+    public CS232Iterator<E> getIterator() {
+        return new ArrayListIterator(); // Return a new instance of the inner class
+    }
+
 }

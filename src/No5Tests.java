@@ -1,4 +1,4 @@
-package hw03;
+
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class No5Tests {
-
+                                                    
     private CS232DoublyLinkedList<String> myList;
 
     @Before

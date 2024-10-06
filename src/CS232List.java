@@ -1,4 +1,3 @@
-package hw03;
 
 /**
  * Generic List interface that defines the operations supported by all of the
