@@ -1,4 +1,3 @@
-package hw03;
 
 /**
  * Doubly linked list implementation of the CS232List interface.
@@ -114,8 +113,20 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 * {@inheritDoc}
 	 */
 	public E remove(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
-		return null;
+		checkBounds(index);
+
+		// Get the node to be remove
+		DLLNode node = getNode(index);
+
+		// Now, remove
+		node.prev.next = node.next;
+		node.next.prev = node.prev;
+
+		// Decrease the size
+		size--;
+
+		// Return the element of the removed node
+		return node.element;
 	}
 
 	/**
@@ -128,7 +139,15 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 *             if index < 0 or index >= size()
 	 */
 	public void clearTo(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
+		checkBounds(index);
+		// Get the node at the given index
+		DLLNode node = getNode(index);
+		DLLNode succ = node.next;
+		// Now remove the nodes
+		head.next = succ;
+		succ.prev = head;
+		// Adjust the size of the list.
+		size -= (index + 1);
 	}
 
 	/**
@@ -149,8 +168,37 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 */
 	public void addAllAt(int index, CS232DoublyLinkedList<E> list)
 			throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
+		if (index < 0 || index > this.size()) {
+			throw new IndexOutOfBoundsException("Invlaid index.");
+		}
+		if (list.size() == 0) {
+			throw new IllegalArgumentException("Provided list is empty");
+		} if (index == 0) {
+			this.head.next.prev = list.tail.prev;
+			list.tail.prev.next = this.head.next;
+			this.head = list.head;
+		} else if (index == (this.size())) {
+			this.tail.prev.next = list.head.next;
+			list.head.next.prev = this.tail.prev;
+			this.tail = list.tail;
+		} else{
+			DLLNode succ = this.getNode(index);
+			DLLNode pred = succ.prev;
+			// Link with the pred
+			pred.next = list.head.next;       
+			list.head.next.prev = pred;         
+			// Link with the succ
+			list.tail.prev.next = succ;       
+			succ.prev = list.tail.prev;          
+		}
+		size += list.size();
 	}
+
+	
+
+
+
+	
 
 	/*
 	 * Defines the node object for the doubly linked list. Note: Fields are

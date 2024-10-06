@@ -1,5 +1,3 @@
-package hw03;
-
 import static org.junit.Assert.*;
 
 import java.util.NoSuchElementException;
@@ -56,15 +54,15 @@ public class No7Tests {
 	@Test
 	public void testNextPreviousSequence() {
 		buildList();
-		it.next();
-		it.next();
-		assertEquals("Incorect value", "two", it.previous());
-		assertEquals("Incorect value", "two", it.next());
+		it.next(); // 1
+		it.next(); // 2
+		assertEquals("Incorect value", "two", it.previous()); // 1 but return 2
+		assertEquals("Incorect value", "two", it.next()); // 2 
 		
-		it.next();
-		it.previous();
-		assertEquals("Incorrect value", "two", it.previous());
-		assertEquals("Incorrect value", "one", it.previous());
+		it.next(); // 3
+		it.previous(); // 2
+		assertEquals("Incorrect value", "two", it.previous()); // 1 but return 2
+		assertEquals("Incorrect value", "one", it.previous()); 
 	}
 	
 	@Test
@@ -80,11 +78,14 @@ public class No7Tests {
 	@Test 
 	public void testPreviousHasPrevious() {
 		buildList();
-		it.next();
-		assertTrue("Should have a previous", it.hasPrevious());
+		it.next(); // one
+		assertTrue("Should have a previous", it.hasPrevious()); 
+		// assuming head can considered as a previous, we have head before "one", so this might be true. 
+		// However, I think that logic is not sensible, I would
+		// keep my code the same, which would not pass the test case
 		
 		while (it.hasNext()) {
-			it.next();
+			it.next(); // The last element of the doubly linkedList
 		}
 		
 		for (int i=0; i<myList.size(); i++) {
@@ -92,7 +93,10 @@ public class No7Tests {
 			it.previous();
 		}
 		
-		assertFalse("Should not a previous", it.hasPrevious());
+		assertFalse("Should not a previous", it.hasPrevious()); // This is conflicting with the assertTrue above
+		// According to the assertTrue above, the first element has previous and I adjusted
+		// my code based on that. But for this assertFalse, the test is saying the first 
+		// element has no previous
 	}
 	
 	@Test
